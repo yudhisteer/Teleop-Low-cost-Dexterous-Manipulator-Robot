@@ -1,1 +1,1 @@
-# Teleop: Low cost Dexterous Manipulator Robot
+# Teleop: Low Cost Dexterous Manipulator Robot
