@@ -9,6 +9,8 @@
 
 ## 0. Pre-requisites
 
+### 0.1 Publisher Node
+
 ```python
 import rclpy
 from rclpy.node import Node
@@ -41,44 +43,90 @@ if __name__ == "__main__":
 
 ```
 
+1. Add the dependencies in ```package.xml``` file:
 
-1. Build the workspace:
+```xml
+  <exec_depend>rclpy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+```
+
+2. We need to instruct the compiler on how it should build our script by adding the line below in ```setup.py```:
+
+```python
+    entry_points={
+        'console_scripts': [
+            'simple_publisher = teleop_robot_py_pkg.simple_publisher:main',
+        ],
+    },
+```
+
+
+3. Build the workspace:
 
 ```shell
 colcon build
 ```
 
-2. Source the workspace:
+4. Source the workspace:
 
 ```shell
-.install/setup.bash
+. install/setup.bash
 ```
 
-3. Run the node:
+5. Run the node:
 
 ```shell
 ros2 run teleopt_py_pkg simple_publisher
 ```
 
-4. View topics at the moment:
+6. View topics at the moment:
 
 ```shell
 ros2 topic list
 ```
 
 
-5. Retrieve data from topic:
+7. Retrieve data from topic:
 
 ```
 ros2 topic echo /chatter
 ```
 
-6. Get more information about your topic using:
+8. Get more information about your topic using:
 
 ```shell
 ros2 topic info /chatter
 ros2 topic info /chatter --verbose
 ```
+
+
+### 0.2 Subscriber Node
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------
+
+## References
+
+
+
+
+
+
+
+
+
+
+
 
 
 
