@@ -3,6 +3,12 @@
 
 ## Plan of Action
 
+0. Pre-requisites
+1. Digital Twin
+2. Control
+3. Kinematics
+4. Application
+5. LLM
 
 
 ----------------------------
@@ -149,9 +155,9 @@ ros2 run teleopt_py_pkg simple_publisher
 ros2 topic pub /chatter std_msgs/msg/String "data: 'Hello, World'"
 ```
 
+--------------------------------------
 
-
-### 0.2 Digital Twin
+## 1. Digital Twin
 
 
 Create a package in the **src** folder named ```teleopt_description``` where we include all components related to the **URDF** of our model as **XML** files:
