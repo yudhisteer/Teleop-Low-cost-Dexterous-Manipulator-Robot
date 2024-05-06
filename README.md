@@ -180,7 +180,6 @@ sudo apt-get install ros-humble-urdf-tutorial
 ros2 launch urdf_tutorial display.launch.py model:=/home/toto/teleop_ws/src/teleopt_description/urdf/teleopt.urdf.xacro
 ```
 
-The robot's configuration begins with a 'world' link serving as the global reference frame. The primary 'base_link', depicted with an STL mesh and positioned at coordinates (-0.5, -0.5, 0), is statically connected to the 'world' via a 'virtual_joint'. Additionally, the 'base_plate' link, illustrated with its own STL mesh and positioned at coordinates (-0.39, -0.39, -0.56), attaches to the 'base_link' through a 'revolute joint'. This joint, which rotates around the Z-axis (0, 0, 1), allows controlled rotational movement within a range of -π/2 to π/2, with an effort limit of 30.0 and a velocity limit of 10.0. 
 
 
 ```xml
@@ -257,17 +256,12 @@ The robot's configuration begins with a 'world' link serving as the global refer
 | ![image](https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/0a594279-f8b1-44e9-b3b9-746f2ab5e908) | ![image](https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/934e48ed-1a89-4d47-8614-f18fd680b108) |
 
 
+The robot's configuration begins with a 'world' link serving as the global reference frame. The primary 'base_link', depicted with an STL mesh and positioned at coordinates (-0.5, -0.5, 0), is statically connected to the 'world' via a 'virtual_joint'. Additionally, the 'base_plate' link, illustrated with its own STL mesh and positioned at coordinates (-0.39, -0.39, -0.56), attaches to the 'base_link' through a 'revolute joint'. This joint, which rotates around the Z-axis (0, 0, 1), allows controlled rotational movement within a range of -π/2 to π/2, with an effort limit of 30.0 and a velocity limit of 10.0. 
+
 
 <p align="center">
-  <img src="https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/29ce0946-1a47-4215-bc80-51b221026b3e" width="70%" />
+  <img src="https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/66046ea7-2efd-4fb4-a28e-83ca93bf4fe6" width="70%" />
 </p>
-
-
-
-
-
-
-
 
 
 
