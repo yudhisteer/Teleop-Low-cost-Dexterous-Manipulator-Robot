@@ -151,6 +151,20 @@ ros2 topic pub /chatter std_msgs/msg/String "data: 'Hello, World'"
 
 
 
+### 0.2 Digital Twin
+
+
+Create a package in the **src** folder named ```teleopt_description``` where we include all components related to the **URDF** of our model as **XML** files:
+
+```
+ros2 pkg create --build-type ament_cmake teleopt_description
+```
+
+Built the package:
+
+```shell
+colcon build
+```
 
 ----------------------
 
