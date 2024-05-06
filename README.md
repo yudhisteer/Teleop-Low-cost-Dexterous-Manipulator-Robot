@@ -172,6 +172,107 @@ Built the package:
 colcon build
 ```
 
+```shell
+sudo apt-get install ros-humble-urdf-tutorial
+```
+
+```shell
+ros2 launch urdf_tutorial display.launch.py model:=/home/toto/teleop_ws/src/teleopt_description/urdf/teleopt.urdf.xacro
+```
+
+The robot's configuration begins with a 'world' link serving as the global reference frame. The primary 'base_link', depicted with an STL mesh and positioned at coordinates (-0.5, -0.5, 0), is statically connected to the 'world' via a 'virtual_joint'. Additionally, the 'base_plate' link, illustrated with its own STL mesh and positioned at coordinates (-0.39, -0.39, -0.56), attaches to the 'base_link' through a 'revolute joint'. This joint, which rotates around the Z-axis (0, 0, 1), allows controlled rotational movement within a range of -π/2 to π/2, with an effort limit of 30.0 and a velocity limit of 10.0. 
+
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- Root element defining the robot with a unique name and xacro namespace inclusion for macros -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="teleop_robot">
+
+    <xacro:property name="PI" value="3.14159"/>
+    <xacro:property name="effort" value="30.0"/>
+    <xacro:property name="velocity" value="10.0"/>
+
+
+    <!-- Link element defining the 'world' link, usually serves as the reference frame for other elements -->
+    <link name="world"/>
+
+    <!-- Link element for 'base_link', the primary link of the robot -->
+    <link name="base_link">
+        <!-- Visual properties of the 'base_link', defining how it looks in the simulation -->
+        <visual>
+            <!-- Origin of the visual representation with zero rotation and translation -->
+            <origin rpy="0 0 0" xyz="-0.5 -0.5 0"/>
+            <!-- Geometry definition using a mesh file -->
+            <geometry>
+                <!-- Mesh file location and scale. 'package://teleopt_robot/meshes/basement.STL' refers to the STL file in the specified package with a scaling factor -->
+                <mesh filename="package://teleopt_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <!-- Joint element defining a fixed connection between 'world' and 'base_link' -->
+    <joint name="virtual_joint" type="fixed">
+        <!-- Parent link of the joint, the 'world' link in this case -->
+        <parent link="world"/>
+        <!-- Child link of the joint, the 'base_link' in this case -->
+        <child link="base_link"/>
+        <!-- Origin of the joint with zero rotation and translation, aligning 'base_link' directly with 'world' -->
+        <origin rpy="0 0 0" xyz="0 0 0"/>
+    </joint>
+
+    <!-- Link element for 'base_plate', includes visual representation settings -->
+    <link name="base_plate">
+        <!-- Visual element specifying the appearance and position of 'base_plate' -->
+        <visual>
+            <!-- Origin of the visual element relative to the parent link -->
+            <origin rpy="0 0 0" xyz="-0.39 -0.39 -0.56"/>
+            <!-- Geometry defining the shape from an external mesh file and its scale -->
+            <geometry>
+                <mesh filename="package://teleopt_description/meshes/base_plate.STL" scale="0.01 0.01 0.01"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <!-- Revolute joint 'joint_1' connecting 'base_link' to 'base_plate' -->
+    <joint name="joint_1" type="revolute">
+        <!-- Parent link of the joint -->
+        <parent link="base_link"/>
+        <!-- Child link of the joint -->
+        <child link="base_plate"/>
+        <!-- Axis of rotation for the revolute joint -->
+        <axis xyz="0 0 1"/>
+        <!-- Origin of the joint relative to the parent link -->
+        <origin rpy="0 0 0" xyz="0 0 0.307"/>
+        <!-- Limits of the joint motion with parameters for rotation angle, force, and speed -->
+        <limit lower="-${PI/2}" upper="${PI/2}" effort="${effort}" velocity="${velocity}"/>
+    </joint>
+
+</robot>
+```
+
+
+| Before | After|
+|---------|---------|
+| ![image](https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/0a594279-f8b1-44e9-b3b9-746f2ab5e908) | ![image](https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/934e48ed-1a89-4d47-8614-f18fd680b108) |
+
+
+
+<p align="center">
+  <img src="https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/29ce0946-1a47-4215-bc80-51b221026b3e" width="70%" />
+</p>
+
+
+
+
+
+
+
+
+
+
+
+
 ----------------------
 
 ## References
