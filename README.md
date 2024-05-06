@@ -73,7 +73,7 @@ colcon build
 . install/setup.bash
 ```
 
-5. Run the node:
+5. Run the simple_publisher node:
 
 ```shell
 ros2 run teleopt_py_pkg simple_publisher
@@ -102,13 +102,52 @@ ros2 topic info /chatter --verbose
 
 ### 0.2 Subscriber Node
 
+```python
+import rclpy
+from rclpy.node import Node
+from std_msgs.msg import String
+
+class SimpleSubscriber(Node):
+    def __init__(self) -> None:
+        super().__init__(node_name="simple_subscriber")
+        self.sub_ = self.create_subscription(msg_type=String, topic="chatter", callback=self.msg_callback, qos_profile=10)
+        
+    def msg_callback(self, msg):
+        self.get_logger().info(f"I heard: {msg.data}")
+
+def main():
+    rclpy.init()
+    simple_subscriber = SimpleSubscriber()
+    rclpy.spin(simple_subscriber)
+    simple_subscriber.destroy_node()
+    rclpy.shutdown()
+
+if __name__ == "__main__":
+    main()
+```
 
 
 
 
+1. Repeat steps 1 - 4 from above.
 
+2. Run the simple_subscriber node:
 
+```shell
+ros2 run teleopt_py_pkg simple_subscriber
+```
 
+3. Publish from publisher node to subscriber node:
+
+```shell
+ros2 run teleopt_py_pkg simple_publisher
+```
+
+4. Publish a new message on the chatter topic:
+
+```shell
+ros2 topic pub /chatter std_msgs/msg/String "data: 'Hello, World'"
+```
 
 
 
