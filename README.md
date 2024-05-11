@@ -158,7 +158,7 @@ ros2 topic pub /chatter std_msgs/msg/String "data: 'Hello, World'"
 --------------------------------------
 
 ## 1. Digital Twin
-
+The URDF convention allows you to represent the structure and the components of any robot through XML tags
 
 Create a package in the **src** folder named ```teleopt_description``` where we include all components related to the **URDF** of our model as **XML** files:
 
@@ -176,8 +176,9 @@ colcon build
 sudo apt-get install ros-humble-urdf-tutorial
 ```
 
+Visualize in **Rviz**:
 ```shell
-ros2 launch urdf_tutorial display.launch.py model:=/home/toto/teleop_ws/src/teleopt_description/urdf/teleopt.urdf.xacro
+ros2 launch urdf_tutorial display.launch.py model:=/home/toto/teleop_ws/src/teleopt_description/urdf/teleop.urdf.xacro
 ```
 
 
