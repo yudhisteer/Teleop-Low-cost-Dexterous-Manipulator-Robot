@@ -158,6 +158,8 @@ ros2 topic pub /chatter std_msgs/msg/String "data: 'Hello, World'"
 --------------------------------------
 
 ## 1. Digital Twin
+
+### 1.1 URDF
 The URDF convention allows you to represent the structure and the components of any robot through XML tags
 
 Create a package in the **src** folder named ```teleopt_description``` where we include all components related to the **URDF** of our model as **XML** files:
@@ -264,9 +266,15 @@ The robot's configuration begins with a 'world' link serving as the global refer
   <img src="https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/66046ea7-2efd-4fb4-a28e-83ca93bf4fe6" width="70%" />
 </p>
 
+### 1.2 Parameters
 
 
 
+### 1.3 Launch Files
+
+
+
+### 1.4 Gazebo
 
 ----------------------
 
