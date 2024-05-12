@@ -3,15 +3,16 @@
 
 ## Plan of Action
 
-0. Pre-requisites
-1. Digital Twin
-2. Control
-3. Kinematics
-4. Application
-5. LLM
+0. [Pre-requisites](#pr)
+1. [Digital Twin](#dt)
+2. [Control](#c)
+3. [Kinematics](#k)
+4. [Application](#a)
+5. [LLM](#llm)
 
 
-----------------------------
+-------------------------
+<a name="pr"></a>
 
 ## 0. Pre-requisites
 
@@ -154,8 +155,8 @@ ros2 run teleopt_py_pkg simple_publisher
 ```shell
 ros2 topic pub /chatter std_msgs/msg/String "data: 'Hello, World'"
 ```
-
---------------------------------------
+-------------------------
+<a name="dt"></a>
 
 ## 1. Digital Twin
 
@@ -276,7 +277,8 @@ The robot's configuration begins with a 'world' link serving as the global refer
 
 ### 1.4 Gazebo
 
-----------------------
+-------------------------
+<a name="c"></a>
 
 ## References
 
