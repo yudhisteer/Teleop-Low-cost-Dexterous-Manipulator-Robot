@@ -297,7 +297,102 @@ Now we will finish our URDF for our robot and visualize its all 4 joints:
 
 ### 1.2 Parameters
 
+1. Again, repeat steps 1 - 4 from above.
 
+- Added dependencies in ```package.xml```.
+- Modified ```setup.py```.
+- Build the workspace using ```colcon build```.
+- Sourced the workspace with ```. install/setup.bash```.
+
+
+```python
+import rclpy
+from rclpy.node import Node
+from rcl_interfaces.msg import SetParametersResult
+from rclpy.parameter import Parameter
+
+
+class SimpleParameter(Node):
+    """A ROS 2 Node that demonstrates parameter declaration and dynamic parameter updates"""
+    
+    def __init__(self):
+        super().__init__("simple_parameter")
+        self.declare_parameter(name="simple_int_param", value=42)  # Declare an integer parameter with default value 42
+        self.declare_parameter(name="simple_string_param", value="iRobot")  # Declare a string parameter with default value 'iRobot'
+
+        # Add a callback to handle parameter changes
+        self.add_on_set_parameters_callback(self.paramChangeCallback)
+
+    def paramChangeCallback(self, params):
+        result = SetParametersResult()  # Create a result object to indicate the success of the parameter update
+
+        for param in params:
+            if param.name == "simple_int_param" and param.type_ == Parameter.Type.INTEGER:
+                # Log the new value of the parameter
+                self.get_logger().info("Param simple_int_param changed! New value is %d" % param.value)
+                result.successful = True
+
+            if param.name == "simple_string_param" and param.type_ == Parameter.Type.STRING:
+                # Log the new value of the parameter
+                self.get_logger().info("Param simple_string_param changed! New value is %s" % param.value)
+                result.successful = True  # Indicate successful update
+
+        return result
+
+def main():
+    rclpy.init()
+    simple_parameter = SimpleParameter()
+    rclpy.spin(simple_parameter)  # Keep the node running to listen for parameter updates
+    simple_parameter.destroy_node()  # Destroy the node after spinning
+    rclpy.shutdown()
+
+if __name__ == "__main__":
+    main()
+```
+
+
+2. To start the ```simple_parameter``` node
+
+```shell
+ros2 run teleop_robot_py_pkg simple_parameter 
+```
+
+
+3. List all the parameters of the ```simple_parameter``` node using this command:
+
+```shell
+ros2 param list
+
+>>/simple_parameter:
+  simple_int_param
+  simple_string_param
+  use_sim_time
+```
+
+4. To read the values of specific parameters, use the ```ros2 param get``` command:
+
+```shell
+ros2 param get /simple_parameter simple_string_param
+ros2 param get /simple_parameter simple_int_param
+
+>> String value is: iRobot
+>> Integer value is: 42
+```
+
+5. To set a **new value** for a parameter before starting the node, use the ```--ros-args -p``` option:
+
+```shell
+ros2 run teleop_robot_py_pkg simple_parameter --ros-args -p simple_int_param:=24
+```
+
+6. You can also change the parameter value while the node is running by using the ```ros2 param set``` command:
+
+```shell
+ros2 param set /simple_parameter simple_string_param "Hello, World!"
+
+>> Set parameter successful
+>> [INFO] [1715633615.899038632] [simple_parameter]: Param simple_string_param changed! New value is Hello, World!
+```
 
 ### 1.3 Launch Files
 
