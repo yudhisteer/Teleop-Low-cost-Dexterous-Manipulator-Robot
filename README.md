@@ -54,14 +54,14 @@ if __name__ == "__main__":
 
 ```
 
-1. First, add the required dependencies in your ```package.xml``` file. This ensures that the necessary packages are included during the **build** process.
+1. First, add the required dependencies in the ```package.xml``` file. This ensures that the necessary packages are included during the **build** process.
 
 ```xml
   <exec_depend>rclpy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
 ```
 
-2. Next, instruct the **compiler** on how it should **build** your script by adding the appropriate **entry points** in ```setup.py```. This will specify the **executable scripts** for the package.
+2. Next, instruct the **compiler** on how it should **build** the script by adding the appropriate **entry points** in ```setup.py```. This will specify the **executable scripts** for the package.
 
 ```python
     entry_points={
@@ -78,7 +78,7 @@ if __name__ == "__main__":
 colcon build
 ```
 
-4. Before running any nodes, **source** the workspace to overlay this workspace on top of your environment.
+4. Before running any nodes, **source** the workspace to overlay this workspace on top of the environment.
 
 ```shell
 . install/setup.bash
@@ -263,7 +263,7 @@ Let's create our first URDF depicting the base of the robot. The robot's configu
 ```
 
 
-Finally, to visualize the URDF model in **RViz**, use the following ```launch``` command. Ensure the path to your URDF file is correct.
+Finally, to visualize the URDF model in **RViz**, use the following ```launch``` command. Ensure the path to the URDF file is correct.
 
 ```shell
 ros2 launch urdf_tutorial display.launch.py model:=/home/toto/teleop_ws/src/teleopt_description/urdf/teleop.urdf.xacro
