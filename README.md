@@ -187,12 +187,7 @@ To visualize the URDF model, install the URDF **tutorial** package.
 ```shell
 sudo apt-get install ros-humble-urdf-tutorial
 ```
-
-Finally, to visualize the URDF model in **RViz**, use the following ```launch``` command. Ensure the path to your URDF file is correct.
-```shell
-ros2 launch urdf_tutorial display.launch.py model:=/home/toto/teleop_ws/src/teleopt_description/urdf/teleop.urdf.xacro
-```
-
+Let's create our first URDF depicting the base of the robot. The robot's configuration begins with a ```world``` **link** serving as the ```global reference frame```. The primary ```base_link```, illustrated with an ```STL``` mesh and positioned at coordinates ```(-0.5, -0.5, 0)```, is **statically** connected to the ```world``` via a ```virtual_joint```. Additionally, the ```base_plate``` link, illustrated with its own ```STL``` mesh and positioned at coordinates ```(-0.39, -0.39, -0.56)```, attaches to the ```base_link``` through a ```revolute joint```. This joint, which **rotates** around the **Z-axis** ```(0, 0, 1)```, allows controlled **rotational** movement within a range of ```-π/2``` to ```π/2```, with an **effort** limit of ```30.0``` and a **velocity** limit of ```10.0```. 
 
 
 ```xml
@@ -264,17 +259,29 @@ ros2 launch urdf_tutorial display.launch.py model:=/home/toto/teleop_ws/src/tele
 ```
 
 
+Finally, to visualize the URDF model in **RViz**, use the following ```launch``` command. Ensure the path to your URDF file is correct.
+
+```shell
+ros2 launch urdf_tutorial display.launch.py model:=/home/toto/teleop_ws/src/teleopt_description/urdf/teleop.urdf.xacro
+```
+
+
+We want to position the ```base_link``` at the same position as the ```world``` link. The image below shows before and after we move the ```base_link``` by ```(-0.5, -0.5, 0)```.
+
 | Before | After|
 |---------|---------|
 | ![image](https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/0a594279-f8b1-44e9-b3b9-746f2ab5e908) | ![image](https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/934e48ed-1a89-4d47-8614-f18fd680b108) |
 
-
-The robot's configuration begins with a 'world' link serving as the global reference frame. The primary 'base_link', depicted with an STL mesh and positioned at coordinates (-0.5, -0.5, 0), is statically connected to the 'world' via a 'virtual_joint'. Additionally, the 'base_plate' link, illustrated with its own STL mesh and positioned at coordinates (-0.39, -0.39, -0.56), attaches to the 'base_link' through a 'revolute joint'. This joint, which rotates around the Z-axis (0, 0, 1), allows controlled rotational movement within a range of -π/2 to π/2, with an effort limit of 30.0 and a velocity limit of 10.0. 
+Below is the visualization of the ```base_plate``` rotating about the ```base_link``` around the **Z-axis** ```(0, 0, 1)```. This joint allows controlled rotational movement within a range of ```-π/2``` to ```π/2```, with an effort limit of ```30.0``` and a velocity limit of ```10.0```.
 
 
 <p align="center">
   <img src="https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/66046ea7-2efd-4fb4-a28e-83ca93bf4fe6" width="70%" />
 </p>
+
+Now we will finish our URDF for our robot and visualize its all 4 joints:
+
+
 
 ### 1.2 Parameters
 
