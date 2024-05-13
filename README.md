@@ -187,6 +187,14 @@ Once the package is created, we need to build it using ```colcon```.
 colcon build
 ```
 
+To ensure that ROS2 recognizes the **meshes** and **urdf** folders, we need to update the ```CMakeLists.txt``` file in our package. This will install these directories in the correct location when the package is built.
+```
+install(
+  DIRECTORY meshes urdf
+  DESTINATION share/${PROJECT_NAME}
+)
+```
+
 To visualize the URDF model, install the URDF **tutorial** package.
 ```shell
 sudo apt-get install ros-humble-urdf-tutorial
