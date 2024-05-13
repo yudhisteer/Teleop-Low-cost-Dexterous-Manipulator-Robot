@@ -16,6 +16,10 @@
 
 ## 0. Pre-requisites
 
+In ROS 2, the **publisher** and **subscriber** nodes are fundamental building blocks for **communication** between different parts of a robotic system. A ```publisher node``` is responsible for **generating** and **sending** **messages** to a specific **topic**, while a ```subscriber node``` listens to that topic and **processes** the **received** messages. This communication pattern allows different components of a robot to exchange information efficiently and in a decoupled manner.
+
+The primary purpose of publisher and subscriber nodes is to enable ```real-time data exchange``` within a robotic system. This facilitates the integration of various **sensors**, **actuators**, and **control algorithms**, allowing for a **modular** and **scalable** architecture. By using topics, ```multiple nodes``` can publish or subscribe to the **same data stream**, promoting flexibility and reusability of code.
+
 ### 0.1 Publisher Node
 
 ```python
