@@ -50,14 +50,14 @@ if __name__ == "__main__":
 
 ```
 
-1. Add the dependencies in ```package.xml``` file:
+1. First, add the required dependencies in your ```package.xml``` file. This ensures that the necessary packages are included during the **build** process.
 
 ```xml
   <exec_depend>rclpy</exec_depend>
   <exec_depend>std_msgs</exec_depend>
 ```
 
-2. We need to instruct the compiler on how it should build our script by adding the line below in ```setup.py```:
+2. Next, instruct the **compiler** on how it should **build** your script by adding the appropriate **entry points** in ```setup.py```. This will specify the **executable scripts** for the package.
 
 ```python
     entry_points={
@@ -68,38 +68,38 @@ if __name__ == "__main__":
 ```
 
 
-3. Build the workspace:
+3. Now, **build** the workspace using ```colcon build```. This will **compile** the package and make it ready for use.
 
 ```shell
 colcon build
 ```
 
-4. Source the workspace:
+4. Before running any nodes, **source** the workspace to overlay this workspace on top of your environment.
 
 ```shell
 . install/setup.bash
 ```
 
-5. Run the simple_publisher node:
+5. Run the ```simple_publisher``` node to start publishing messages.
 
 ```shell
 ros2 run teleopt_py_pkg simple_publisher
 ```
 
-6. View topics at the moment:
+6. List all active **topics** to see which topics are currently being **published** or **subscribed** to.
 
 ```shell
 ros2 topic list
 ```
 
 
-7. Retrieve data from topic:
+7. **Echo** the data being published on a specific topic. For example, to retrieve data from the ```/chatter``` topic:
 
 ```
 ros2 topic echo /chatter
 ```
 
-8. Get more information about your topic using:
+8. For more detailed information about a topic, you can use the ```ros2 topic info``` command. The ```--verbose``` flag provides even more detailed information.
 
 ```shell
 ros2 topic info /chatter
@@ -138,19 +138,24 @@ if __name__ == "__main__":
 
 1. Repeat steps 1 - 4 from above.
 
-2. Run the simple_subscriber node:
+- Added dependencies in ```package.xml```.
+- Modified ```setup.py```.
+- Build the workspace using ```colcon build```.
+- Sourced the workspace with ```. install/setup.bash```.
+
+2. Start the ```simple_subscriber``` node to begin **receiving** messages on the topic.
 
 ```shell
 ros2 run teleopt_py_pkg simple_subscriber
 ```
 
-3. Publish from publisher node to subscriber node:
+3. Now, run the ```simple_publisher``` node to start **sending** messages to the ```simple_subscriber``` node.
 
 ```shell
 ros2 run teleopt_py_pkg simple_publisher
 ```
 
-4. Publish a new message on the chatter topic:
+4. You can manually **publish** a **new message** to the ```/chatter``` topic using the ```ros2 topic pub``` command.
 
 ```shell
 ros2 topic pub /chatter std_msgs/msg/String "data: 'Hello, World'"
@@ -159,27 +164,31 @@ ros2 topic pub /chatter std_msgs/msg/String "data: 'Hello, World'"
 <a name="dt"></a>
 
 ## 1. Digital Twin
+A Digital Twin is a detailed ```virtual model``` of a ```physical object```, process, or system. It uses **simulations** to support better decision-making. In robotics, a digital twin allows us to test and refine a robot's behavior and performance in a virtual setting before putting it to work in the real world. This approach helps us spot potential issues early, improve the design, and boost overall efficiency. More on this in my other project: [Digital Twin of Anthropomorphic Robotic Arm using AR](https://github.com/yudhisteer/Digital-Twin-of-Anthropomorphic-Robotic-Arm) and [Vision Transformer-Based Multi-Class Classification for Simulated 6DoF Robot ](https://github.com/yudhisteer/Vision-Transformer-Based-Multi-Class-Classification-for-Simulated-6DoF-Robot).
+
+To create an accurate digital twin of a robot, we need to define its physical structure and components in a standardized format. This is where URDF (Unified Robot Description Format) comes into play.
 
 ### 1.1 URDF
-The URDF convention allows you to represent the structure and the components of any robot through XML tags
+The URDF (Unified Robot Description Format) convention allows you to represent the structure and the components of any robot through XML tags.
 
-Create a package in the **src** folder named ```teleopt_description``` where we include all components related to the **URDF** of our model as **XML** files:
+Create a package in the src folder named ```teleopt_description```, where we include all components related to the **URDF** of our model as **XML** files.
 
 ```
 ros2 pkg create --build-type ament_cmake teleopt_description
 ```
 
-Built the package:
+Once the package is created, we need to build it using ```colcon```.
 
 ```shell
 colcon build
 ```
 
+To visualize the URDF model, install the URDF **tutorial** package.
 ```shell
 sudo apt-get install ros-humble-urdf-tutorial
 ```
 
-Visualize in **Rviz**:
+Finally, to visualize the URDF model in **RViz**, use the following ```launch``` command. Ensure the path to your URDF file is correct.
 ```shell
 ros2 launch urdf_tutorial display.launch.py model:=/home/toto/teleop_ws/src/teleopt_description/urdf/teleop.urdf.xacro
 ```
