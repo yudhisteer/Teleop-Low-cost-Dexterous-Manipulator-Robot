@@ -166,10 +166,10 @@ ros2 topic pub /chatter std_msgs/msg/String "data: 'Hello, World'"
 ## 1. Digital Twin
 A Digital Twin is a detailed ```virtual model``` of a ```physical object```, process, or system. It uses **simulations** to support better decision-making. In robotics, a digital twin allows us to test and refine a robot's behavior and performance in a virtual setting before putting it to work in the real world. This approach helps us spot potential issues early, improve the design, and boost overall efficiency. More on this in my other project: [Digital Twin of Anthropomorphic Robotic Arm using AR](https://github.com/yudhisteer/Digital-Twin-of-Anthropomorphic-Robotic-Arm) and [Vision Transformer-Based Multi-Class Classification for Simulated 6DoF Robot ](https://github.com/yudhisteer/Vision-Transformer-Based-Multi-Class-Classification-for-Simulated-6DoF-Robot).
 
-To create an accurate digital twin of a robot, we need to define its physical structure and components in a standardized format. This is where URDF (Unified Robot Description Format) comes into play.
+To create an accurate digital twin of a robot, we need to define its** physical structure** and **components** in a ```standardized format```. This is where **URDF** (```Unified Robot Description Format```) comes into play.
 
 ### 1.1 URDF
-The URDF (Unified Robot Description Format) convention allows you to represent the structure and the components of any robot through XML tags.
+The **URDF** (```Unified Robot Description Format```) convention allows you to represent the **structure** and the **components** of any robot through ```XML``` tags.
 
 Create a package in the src folder named ```teleopt_description```, where we include all components related to the **URDF** of our model as **XML** files.
 
