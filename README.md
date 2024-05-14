@@ -394,6 +394,34 @@ ros2 param set /simple_parameter simple_string_param "Hello, World!"
 >> [INFO] [1715633615.899038632] [simple_parameter]: Param simple_string_param changed! New value is Hello, World!
 ```
 
+Now that we know how to get and set a parameter, let's configure some nodes that will allow us to publish the URDF model within some Ros2 topics such that Rviz can read the information to display the links and joints on its GUI.
+
+7. The ```robot_state_publisher``` node publishes the **state** of the robot to the ```/robot_description``` topic. This command uses **xacro** to process the **URDF** file and pass it to the ```robot_state_publisher```:
+   
+```shell
+ros2 run robot_state_publisher robot_state_publisher  --ros-args -p robot_description:="$(xacro /home/toto/teleop_ws/src/teleopt_description/urdf/teleop.urdf.xacro)"
+```
+
+8. The ```joint_state_publisher_gui``` node provides a **GUI** to manually **control** and **publish** the joint states of the robot. This is useful for testing and visualizing the robot's joint configurations:
+
+```shell
+ros2 run joint_state_publisher_gui joint_state_publisher_gui 
+```
+
+9. Finally, launch **RViz** to visualize the robot model and its states. RViz **subscribes** to the topics **published** by ```robot_state_publisher``` and ```joint_state_publisher_gui``` to display the robot model and joint states in real-time:
+
+```shell
+ros2 run rviz2 rviz2
+```
+
+Once Rviz is opened, add the **TF** and **Robot model** into the environemnt and it is now ready to be played.
+
+<p align="center">
+  <img src="https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/345bf5fd-479a-474b-99d4-8ad2521dc1ac" width="60%" />
+</p>
+
+
+
 ### 1.3 Launch Files
 
 
