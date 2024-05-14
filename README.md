@@ -87,7 +87,7 @@ colcon build
 5. Run the ```simple_publisher``` node to start publishing messages.
 
 ```shell
-ros2 run teleopt_py_pkg simple_publisher
+ros2 run teleop_py_pkg simple_publisher
 ```
 
 6. List all active **topics** to see which topics are currently being **published** or **subscribed** to.
@@ -150,13 +150,13 @@ if __name__ == "__main__":
 2. Start the ```simple_subscriber``` node to begin **receiving** messages on the topic.
 
 ```shell
-ros2 run teleopt_py_pkg simple_subscriber
+ros2 run teleop_py_pkg simple_subscriber
 ```
 
 3. Now, run the ```simple_publisher``` node to start **sending** messages to the ```simple_subscriber``` node.
 
 ```shell
-ros2 run teleopt_py_pkg simple_publisher
+ros2 run teleop_py_pkg simple_publisher
 ```
 
 4. You can manually **publish** a **new message** to the ```/chatter``` topic using the ```ros2 topic pub``` command.
@@ -175,10 +175,10 @@ To create an accurate digital twin of a robot, we need to define its** physical 
 ### 1.1 URDF
 The **URDF** (```Unified Robot Description Format```) convention allows you to represent the **structure** and the **components** of any robot through ```XML``` tags.
 
-Create a package in the src folder named ```teleopt_description```, where we include all components related to the **URDF** of our model as **XML** files.
+Create a package in the src folder named ```teleop_description```, where we include all components related to the **URDF** of our model as **XML** files.
 
 ```
-ros2 pkg create --build-type ament_cmake teleopt_description
+ros2 pkg create --build-type ament_cmake teleop_description
 ```
 
 Once the package is created, we need to build it using ```colcon```.
@@ -224,8 +224,8 @@ Let's create our first URDF depicting the base of the robot. The robot's configu
             <origin rpy="0 0 0" xyz="-0.5 -0.5 0"/>
             <!-- Geometry definition using a mesh file -->
             <geometry>
-                <!-- Mesh file location and scale. 'package://teleopt_robot/meshes/basement.STL' refers to the STL file in the specified package with a scaling factor -->
-                <mesh filename="package://teleopt_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
+                <!-- Mesh file location and scale. 'package://teleop_description/meshes/basement.STL' refers to the STL file in the specified package with a scaling factor -->
+                <mesh filename="package://teleop_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
     </link>
@@ -248,7 +248,7 @@ Let's create our first URDF depicting the base of the robot. The robot's configu
             <origin rpy="0 0 0" xyz="-0.39 -0.39 -0.56"/>
             <!-- Geometry defining the shape from an external mesh file and its scale -->
             <geometry>
-                <mesh filename="package://teleopt_description/meshes/base_plate.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://teleop_description/meshes/base_plate.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
     </link>
@@ -274,7 +274,7 @@ Let's create our first URDF depicting the base of the robot. The robot's configu
 Finally, to visualize the URDF model in **RViz**, use the following ```launch``` command. Ensure the path to the URDF file is correct.
 
 ```shell
-ros2 launch urdf_tutorial display.launch.py model:=/home/toto/teleop_ws/src/teleopt_description/urdf/teleop.urdf.xacro
+ros2 launch urdf_tutorial display.launch.py model:=/home/toto/teleop_ws/src/teleop_description/urdf/teleop.urdf.xacro
 ```
 
 
@@ -399,7 +399,7 @@ Now that we know how to get and set a parameter, let's configure some nodes that
 7. The ```robot_state_publisher``` node publishes the **state** of the robot to the ```/robot_description``` topic. This command uses **xacro** to process the **URDF** file and pass it to the ```robot_state_publisher```:
    
 ```shell
-ros2 run robot_state_publisher robot_state_publisher  --ros-args -p robot_description:="$(xacro /home/toto/teleop_ws/src/teleopt_description/urdf/teleop.urdf.xacro)"
+ros2 run robot_state_publisher robot_state_publisher  --ros-args -p robot_description:="$(xacro /home/toto/teleop_ws/src/teleop_description/urdf/teleop.urdf.xacro)"
 ```
 
 8. The ```joint_state_publisher_gui``` node provides a **GUI** to manually **control** and **publish** the joint states of the robot. This is useful for testing and visualizing the robot's joint configurations:
@@ -446,13 +446,13 @@ def generate_launch_description():
     This function sets up the necessary launch arguments, parameters, and nodes to visualize the
     robot model using the robot_state_publisher, joint_state_publisher_gui, and RViz.
     """
-    # Get the directory of the 'teleopt_description' package
-    teleopt_description_dir = get_package_share_directory('teleopt_description')
+    # Get the directory of the 'teleop_description' package
+    teleop_description_dir = get_package_share_directory('teleop_description')
 
     # Declare a launch argument for the robot model file path
     model_arg = DeclareLaunchArgument(
         name='model',
-        default_value=os.path.join(teleopt_description_dir, 'urdf', 'teleop.urdf.xacro'),
+        default_value=os.path.join(teleop_description_dir, 'urdf', 'teleop.urdf.xacro'),
         description='Absolute path to robot urdf file'
     )
 
@@ -481,7 +481,7 @@ def generate_launch_description():
         executable='rviz2',
         name='rviz2',
         output='screen',
-        arguments=['-d', os.path.join(teleopt_description_dir, 'rviz', 'display.rviz')],
+        arguments=['-d', os.path.join(teleop_description_dir, 'rviz', 'display.rviz')],
     )
 
     # Return the launch description including all defined launch arguments and nodes
@@ -500,10 +500,10 @@ def generate_launch_description():
 - Build the workspace using ```colcon build```.
 - Source the workspace with ```. install/setup.bash```.
 
-2. To visualize the URDF model, execute the following launch command. This will start the necessary nodes and processes defined in the ```display.launch.py``` file within the ```teleopt_description``` package.
+2. To visualize the URDF model, execute the following launch command. This will start the necessary nodes and processes defined in the ```display.launch.py``` file within the ```teleop_description``` package.
 
 ```shell
-ros2 launch teleopt_description display.launch.py
+ros2 launch teleop_description display.launch.py
 ```
 
 ### 1.4 Gazebo
@@ -517,7 +517,7 @@ Before our URDF file did not have any inertia or collision components. Hence, Rv
         <visual>
             <origin rpy="0 0 0" xyz="-0.5 -0.5 0"/>
             <geometry>
-                <mesh filename="package://teleopt_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://teleop_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
     </link>
@@ -537,7 +537,7 @@ Here are some changes to our URDF file:
     <visual>
         <origin rpy="0 0 0" xyz="-0.5 -0.5 0"/>
         <geometry>
-            <mesh filename="package://teleopt_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
+            <mesh filename="package://teleop_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
         </geometry>
     </visual>
     <!-- Collision properties of the 'base_link', used for physics simulations and collision detection -->
@@ -547,16 +547,16 @@ Here are some changes to our URDF file:
         <!-- Geometry definition for collision detection using a mesh file -->
         <geometry>
             <!-- Mesh file location and scale for collision detection -->
-            <mesh filename="package://teleopt_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
+            <mesh filename="package://teleop_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
         </geometry>
     </collision>
 </link>
 ```
 
-This command runs the launch file ```gazebo.launch.py``` from the ```teleopt_description``` package to visualize the robot in Gazebo, 
+This command runs the launch file ```gazebo.launch.py``` from the ```teleop_description``` package to visualize the robot in Gazebo, 
 
 ```shell
-ros2 launch teleopt_description gazebo.launch.py
+ros2 launch teleop_description gazebo.launch.py
 ```
 By making these changes, the URDF is now better suited for simulation in Gazebo, providing more accurate and realistic physics and collision interactions.
 
