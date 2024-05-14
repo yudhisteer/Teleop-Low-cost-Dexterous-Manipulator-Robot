@@ -516,13 +516,19 @@ Before:
         <visual>
             <origin rpy="0 0 0" xyz="-0.5 -0.5 0"/>
             <geometry>
-                <mesh filename="package://arduinobot_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
+                <mesh filename="package://teleopt_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
             </geometry>
         </visual>
     </link>
 ```
 
-After:
+Here are some changes to our URDF file:
+
+- Before no links had any **inertial** properties. So now we add ```<xacro:default_inertial mass="value"/>``` to the links to define its inertial properties, such as **mass**. This is important for physics simulations in Gazebo, as it allows the simulation to account for the link's **mass** and **inertia**, resulting in more **realistic** behavior.
+
+- Before no links had any **collision** properties defined. Now we add a ```<collision>``` element to the links to define its **collision** properties. This includes specifying the origin and geometry for the collision detection using a mesh file. Collision properties are crucial for realistic interactions in Gazebo, as they allow the simulation to **detect** and **respond** to **collisions** between objects.
+
+
 ```xml
 <!-- Link element for 'base_link', the primary link of the robot -->
 <link name="base_link">
@@ -540,18 +546,26 @@ After:
         <!-- Geometry definition for collision detection using a mesh file -->
         <geometry>
             <!-- Mesh file location and scale for collision detection -->
-            <mesh filename="package://arduinobot_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
+            <mesh filename="package://teleopt_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
         </geometry>
     </collision>
 </link>
 ```
 
 
-Similarly, we create a ```launch``` file to visualize our robot in Gazebo:
+This command runs the launch file ```gazebo.launch.py``` from the ```teleopt_description``` package to visualize the robot in Gazebo, 
 
 ```shell
 ros2 launch teleopt_description gazebo.launch.py
 ```
+By making these changes, the URDF is now better suited for simulation in Gazebo, providing more accurate and realistic physics and collision interactions.
+
+<p align="center">
+  <img src="https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/b73e0f15-e6e5-49d2-9f81-6379f7a45c27" width="70%" />
+</p>
+
+
+
 
 -------------------------
 <a name="c"></a>
