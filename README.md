@@ -447,12 +447,12 @@ def generate_launch_description():
     robot model using the robot_state_publisher, joint_state_publisher_gui, and RViz.
     """
     # Get the directory of the 'teleopt_description' package
-    arduinobot_description_dir = get_package_share_directory('teleopt_description')
+    teleopt_description_dir = get_package_share_directory('teleopt_description')
 
     # Declare a launch argument for the robot model file path
     model_arg = DeclareLaunchArgument(
         name='model',
-        default_value=os.path.join(arduinobot_description_dir, 'urdf', 'teleop.urdf.xacro'),
+        default_value=os.path.join(teleopt_description_dir, 'urdf', 'teleop.urdf.xacro'),
         description='Absolute path to robot urdf file'
     )
 
@@ -481,7 +481,7 @@ def generate_launch_description():
         executable='rviz2',
         name='rviz2',
         output='screen',
-        arguments=['-d', os.path.join(arduinobot_description_dir, 'rviz', 'display.rviz')],
+        arguments=['-d', os.path.join(teleopt_description_dir, 'rviz', 'display.rviz')],
     )
 
     # Return the launch description including all defined launch arguments and nodes
