@@ -424,9 +424,95 @@ Once Rviz is opened, add the **TF** and **Robot model** into the environemnt and
 
 ### 1.3 Launch Files
 
+We can see it is a pain to run all these commands in separate terminals to display our robot on Rviz. What instead we can do is build a ```launch``` file that has all these commands such that we will be able to run Rviz displaying our robot with only ```1``` command. 
 
+```python
+import os
+from ament_index_python.packages import get_package_share_directory
+
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import Command, LaunchConfiguration
+
+from launch_ros.actions import Node
+from launch_ros.parameter_descriptions import ParameterValue
+
+def generate_launch_description():
+    """
+    Generate a launch description for launching nodes to visualize the robot model in RViz.
+
+    This function sets up the necessary launch arguments, parameters, and nodes to visualize the
+    robot model using the robot_state_publisher, joint_state_publisher_gui, and RViz.
+    """
+    # Get the directory of the 'teleopt_description' package
+    arduinobot_description_dir = get_package_share_directory('teleopt_description')
+
+    # Declare a launch argument for the robot model file path
+    model_arg = DeclareLaunchArgument(
+        name='model',
+        default_value=os.path.join(arduinobot_description_dir, 'urdf', 'teleop.urdf.xacro'),
+        description='Absolute path to robot urdf file'
+    )
+
+    # Define the robot description parameter using the xacro command to process the URDF file
+    robot_description = ParameterValue(
+        Command(['xacro ', LaunchConfiguration('model')]),
+        value_type=str
+    )
+
+    # Define the robot_state_publisher node to publish the robot state
+    robot_state_publisher_node = Node(
+        package='robot_state_publisher',
+        executable='robot_state_publisher',
+        parameters=[{'robot_description': robot_description}]
+    )
+
+    # Define the joint_state_publisher_gui node to provide a GUI for joint states
+    joint_state_publisher_gui_node = Node(
+        package='joint_state_publisher_gui',
+        executable='joint_state_publisher_gui'
+    )
+
+    # Define the RViz node to visualize the robot model
+    rviz_node = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        arguments=['-d', os.path.join(arduinobot_description_dir, 'rviz', 'display.rviz')],
+    )
+
+    # Return the launch description including all defined launch arguments and nodes
+    return LaunchDescription([
+        model_arg,
+        joint_state_publisher_gui_node,
+        robot_state_publisher_node,
+        rviz_node
+    ])
+```
+
+1. Again, repeat steps 1 - 4 from above.
+
+- Add dependencies in ```package.xml```.
+- Modify ```setup.py```.
+- Build the workspace using ```colcon build```.
+- Source the workspace with ```. install/setup.bash```.
+
+2. To visualize the URDF model, execute the following launch command. This will start the necessary nodes and processes defined in the ```display.launch.py``` file within the ```teleopt_description``` package.
+
+```shell
+ros2 launch teleopt_description display.launch.py
+```
 
 ### 1.4 Gazebo
+
+-------------------------
+<a name="c"></a>
+## 2. Control
+
+
+
+
 
 -------------------------
 <a name="c"></a>
