@@ -426,6 +426,8 @@ Once Rviz is opened, add the **TF** and **Robot model** into the environemnt and
 
 We can see it is a pain to run all these commands in separate terminals to display our robot on Rviz. What instead we can do is build a ```launch``` file that has all these commands such that we will be able to run Rviz displaying our robot with only ```1``` command. 
 
+The code below does the steps ```7```, ```8``` and ```9``` as shown above in one simple command:
+
 ```python
 import os
 from ament_index_python.packages import get_package_share_directory
