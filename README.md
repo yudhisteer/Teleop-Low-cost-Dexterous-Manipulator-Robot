@@ -509,7 +509,7 @@ ros2 launch teleopt_description display.launch.py
 ### 1.4 Gazebo
 Gazebo is a robotics simulator that provides accurate and efficient simulation of robots in complex environments. It supports high-fidelity physics simulation, allowing to testing and validatation of robotic systems before deploying them in the real world. As such, ```inertia``` is essential for simulating realistic physical behaviors, such as **gravity**, **momentum**, and **stability**. ```Collision``` properties enable accurate **detection** and **response** to interactions between objects, ensuring realistic simulations of **impacts**, **friction**, and **constraints**.
 
-Before our URDF file did not have any inertia or collsion components. Hence, Rviz did a coarse visualization in a none physics-applied environment. However, in order to simulate the real-word we will need to modify our URDF.
+Before our URDF file did not have any inertia or collision components. Hence, Rviz did a coarse visualization in a none physics-applied environment. However, in order to simulate the real-world we will need to modify our URDF.
 
 ```xml
 <!-- Link element for 'base_link', the primary link of the robot -->
