@@ -296,14 +296,7 @@ Now we will finish our URDF for our robot and visualize its all 4 joints:
 
 
 ### 1.2 Parameters
-
-1. Again, repeat steps 1 - 4 from above.
-
-- Added dependencies in ```package.xml```.
-- Modified ```setup.py```.
-- Build the workspace using ```colcon build```.
-- Sourced the workspace with ```. install/setup.bash```.
-
+In ROS2, parameters are settings that control how nodes behave. They allow you to adjust things like thresholds or modes without changing the code, making it easier to configure and manage nodes. Let's see a simple example.
 
 ```python
 import rclpy
@@ -349,6 +342,13 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+1. Again, repeat steps 1 - 4 from above.
+
+- Added dependencies in ```package.xml```.
+- Modified ```setup.py```.
+- Build the workspace using ```colcon build```.
+- Sourced the workspace with ```. install/setup.bash```.
 
 
 2. To start the ```simple_parameter``` node
