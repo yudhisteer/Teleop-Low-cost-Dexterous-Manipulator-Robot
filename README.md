@@ -491,10 +491,10 @@ def generate_launch_description():
     ])
 ```
 
-1. Again, repeat steps 1 - 4 from above.
+1. Again, we will repeat some earlier process:
 
 - Add dependencies in ```package.xml```.
-- Modify ```setup.py```.
+- Update the ```CMakeLists.txt``` file in our package with **launch** and **rviz**.
 - Build the workspace using ```colcon build```.
 - Source the workspace with ```. install/setup.bash```.
 
@@ -506,16 +506,61 @@ ros2 launch teleopt_description display.launch.py
 
 ### 1.4 Gazebo
 
+
+
+Before:
+
+```xml
+<!-- Link element for 'base_link', the primary link of the robot -->
+    <link name="base_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="-0.5 -0.5 0"/>
+            <geometry>
+                <mesh filename="package://arduinobot_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
+            </geometry>
+        </visual>
+    </link>
+```
+
+After:
+```xml
+<!-- Link element for 'base_link', the primary link of the robot -->
+<link name="base_link">
+    <xacro:default_inertial mass="1.0"/>  <!-- Default inertial properties with mass 1.0 kg -->
+    <visual>
+        <origin rpy="0 0 0" xyz="-0.5 -0.5 0"/>
+        <geometry>
+            <mesh filename="package://teleopt_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
+        </geometry>
+    </visual>
+    <!-- Collision properties of the 'base_link', used for physics simulations and collision detection -->
+    <collision>
+        <!-- Origin of the collision representation with zero rotation and translation -->
+        <origin rpy="0 0 0" xyz="-0.5 -0.5 0"/>
+        <!-- Geometry definition for collision detection using a mesh file -->
+        <geometry>
+            <!-- Mesh file location and scale for collision detection -->
+            <mesh filename="package://arduinobot_description/meshes/basement.STL" scale="0.01 0.01 0.01"/>
+        </geometry>
+    </collision>
+</link>
+```
+
+
+Similarly, we create a ```launch``` file to visualize our robot in Gazebo:
+
+```shell
+ros2 launch teleopt_description gazebo.launch.py
+```
+
 -------------------------
 <a name="c"></a>
 ## 2. Control
 
 
 
-
-
 -------------------------
-<a name="c"></a>
+<a name="k"></a>
 
 ## References
 
