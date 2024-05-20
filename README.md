@@ -564,8 +564,71 @@ By making these changes, the URDF is now better suited for simulation in Gazebo,
   <img src="https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/b73e0f15-e6e5-49d2-9f81-6379f7a45c27" width="70%" />
 </p>
 
+To visualize the content of the camera, we need to simulate the RGB camera sensor in **Gazebo**. Gazebo will **publish** the video stream from the simulated camera to a ```ROS 2 topic```. To achieve this, you need to add a ```<gazebo>``` tag to the URDF model of your robot. Within this tag, use a ```<sensor>``` tag to activate the simulation of the desired sensor in Gazebo. Below, we have adjusted the configuration parameters of our simulated camera to match the hardware specifications of a real ```Raspberry Pi Camera 3```. Note that we can either insert the ```<gazebo>``` tags within the URDF file directly or we can create a separate file - ```.xacro``` file and reference it in our main URDF file.
 
+```xml
+    <!-- Gazebo plugin configuration for the 'rgb_camera' reference -->
+    <gazebo reference="rgb_camera">
 
+        <!-- Define the camera sensor -->
+        <sensor type="camera" name="rgb_camera">
+            <!-- Ensure the camera is always on -->
+            <always_on>true</always_on>
+            <!-- Set the update rate of the camera to 30 frames per second -->
+            <update_rate>30.0</update_rate>
+            
+            <!-- Camera-specific parameters -->
+            <camera name="rgb_camera">
+                <!-- Define the horizontal field of view of the camera -->
+                <horizontal_fov>1.15</horizontal_fov>
+                <!-- Define the vertical field of view of the camera -->
+                <vertical_fov>0.71</vertical_fov>
+                
+                <!-- Image properties -->
+                <image>
+                    <!-- Image width in pixels -->
+                    <width>2304</width>
+                    <!-- Image height in pixels -->
+                    <height>1296</height>
+                    <!-- Image format -->
+                    <format>R8G8B8</format>
+                </image>
+                
+                <!-- Distortion parameters -->
+                <distortion>
+                    <!-- Radial distortion coefficient k1 -->
+                    <k1>0.0</k1>
+                    <!-- Radial distortion coefficient k2 -->
+                    <k2>0.0</k2>
+                    <!-- Radial distortion coefficient k3 -->
+                    <k3>0.0</k3>
+                    <!-- Tangential distortion coefficient p1 -->
+                    <p1>0.0</p1>
+                    <!-- Tangential distortion coefficient p2 -->
+                    <p2>0.0</p2>
+                    <!-- Distortion center in normalized coordinates -->
+                    <center>0.5 0.5</center>
+                </distortion>
+            </camera>
+            
+            <!-- Plugin for interfacing with ROS -->
+            <plugin name="plugin_name" filename="libgazebo_ros_camera.so">
+                <!-- ROS remapping for image and camera info topics -->
+                <ros>
+                    <remapping>~/image_raw:=image_raw</remapping>
+                    <remapping>~/camera_info:=camera_info</remapping>
+                </ros>
+                <!-- Name of the camera in ROS -->
+                <camera_name>rgb_camera</camera_name>
+                <!-- Name of the frame for the camera in ROS -->
+                <frame_name>rgb_camera</frame_name>
+                <!-- Baseline hack parameter -->
+                <hack_baseline>0.2</hack_baseline>
+            </plugin>
+        </sensor>
+```
+
+Gazebo will simulate the camera within the virtual environment, while Rviz will visualize the content of the topics. Specifically, Rviz will **subscribe** to the camera topic and display its content.
 
 -------------------------
 <a name="c"></a>
