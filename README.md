@@ -561,7 +561,7 @@ ros2 launch teleop_description gazebo.launch.py
 By making these changes, the URDF is now better suited for simulation in Gazebo, providing more accurate and realistic physics and collision interactions.
 
 <p align="center">
-  <img src="https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/b73e0f15-e6e5-49d2-9f81-6379f7a45c27" width="70%" />
+  <img src="https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/b73e0f15-e6e5-49d2-9f81-6379f7a45c27" width="90%" />
 </p>
 
 To visualize the content of the camera, we need to simulate the RGB camera sensor in **Gazebo**. Gazebo will **publish** the video stream from the simulated camera to a ```ROS 2 topic```. To achieve this, you need to add a ```<gazebo>``` tag to the URDF model of your robot. Within this tag, use a ```<sensor>``` tag to activate the simulation of the desired sensor in Gazebo. Below, we have adjusted the configuration parameters of our simulated camera to match the hardware specifications of a real ```Raspberry Pi Camera 3```. Note that we can either insert the ```<gazebo>``` tags within the URDF file directly or we can create a separate file - ```.xacro``` file and reference it in our main URDF file.
@@ -982,17 +982,41 @@ The log indicates the successful loading, configuring, and activation of the ```
 [spawner-2] [INFO] [1716315559.358607590] [spawner_joint_state_broadcaster]: Configured and activated joint_state_broadcaster
 ###---
 ```
+Now we can use the CLI, to control the gripper of the robot.
+If we want to get a list of all the currently configured and active controllers for our robot:
+
+```shell
+ros2 control list_controllers
+```
+
+If we want to get the list of hardware components currently available to work with the ROS2 control interface:
+
+```shell
+ros2 control list_hardware_components 
+```
+
+When we use ```ros2 topic list```, we have the topic ```/gripper_controller/commands``` which we can use to publish new commands to the gripper. If we want to open our gripper, do:
 
 
+```shell
+ros2 topic pub /gripper_controller/commands std_msgs/msg/Float64MultiArray "layout:
+  dim: []
+  data_offset: 0
+data: [-1]" 
+```
 
+If we want to close the gripper:
 
+```shell
+ros2 topic pub /gripper_controller/commands std_msgs/msg/Float64MultiArray "layout:
+  dim: []
+  data_offset: 0
+data: [0]" 
+```
 
-
-
-
-
-
-
+<p align="center">
+  <img src="https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/74a133cd-0318-406d-aaf6-38c1f9b3bcd7" width="90%" />
+</p>
 
 
 
