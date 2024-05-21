@@ -634,7 +634,9 @@ Gazebo will simulate the camera within the virtual environment, while Rviz will 
 <a name="c"></a>
 ## 2. Control
 
-
+```shell
+ros2 pkg create --build-type ament_cmake teleop_controller
+```
 
 -------------------------
 <a name="k"></a>
