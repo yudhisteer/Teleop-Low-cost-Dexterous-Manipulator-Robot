@@ -1029,7 +1029,9 @@ data: [0]"
 -------------------------
 <a name="k"></a>
 ## 3. Kinematics
+We now have a real manipulator robot in Gazebo, controllable via ROS 2 Control. However, our current system only allows **individual joint control**, making complex movements difficult, like those needed for pick-and-place tasks. To simplify control, we'll study **kinematics**, which focuses on the robot's gripper **position** and **orientation** in ```3D space``` rather than ```joint angles```.
 
+Currently, manually coordinating joints to move the gripper is complex and impractical. Kinematics helps us understand how joint movements affect the gripper's position, using **forward kinematics** (```joint angles to gripper position```) and **inverse kinematics** (```gripper position to joint angles```). This allows us to move the gripper directly in ```Cartesian space```, with the math handling joint coordination automatically.
 
 
 -------------------------
