@@ -770,6 +770,238 @@ Next, we create a new package in our ```src``` directory named ```teleop_control
 ros2 pkg create --build-type ament_cmake teleop_controller
 ```
 
+We create a ```config``` folder and create the ```teleop_controllers.yaml``` file where we will configure our robots parameters. In ROS 2, ```YAML``` configuration files simplify setting **parameters** for **nodes** and **applications**. For example, the ```controller manager``` node configuration starts with the node's name, followed by ```ros__parameters``` to indicate ROS 2 parameters.
+
+In our configuration:
+
+- We set an ```update_rate``` of ```10 Hz``` for the control **loop**.
+- We define two **controllers**: ```arm_controller``` and ```gripper_controller```, both using ```joint_trajectory_controller``` type.
+- The ```joint_state_broadcaster``` **publishes** the robot's joint states.
+
+Each controller has parameters for the joints it controls, specifying **command** and **state interfaces** for position. The ```arm_controller``` manages joints ```1```, ```2```, and ```3```, while the ```gripper_controller``` manages joint ```4```. Parameters like ```open_loop_control``` and ```allow_integration_in_goal_trajectories``` are also set to **true** for both controllers.
+
+
+```yaml
+controller_manager:
+  ros__parameters:
+    update_rate: 10 # Hz
+
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    gripper_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+
+### ---------------------------------------------------------------- ###
+arm_controller:
+  ros__parameters:
+    joints:
+      - joint_1
+      - joint_2
+      - joint_3
+
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position
+
+    open_loop_control: true
+    allow_integration_in_goal_trajectories: true
+
+gripper_controller:
+  ros__parameters:
+    joints:
+      - joint_4
+    interface_name: position
+      
+    command_interfaces:
+      - position
+
+    state_interfaces:
+      - position
+
+    open_loop_control: true
+    allow_integration_in_goal_trajectories: true
+### ---------------------------------------------------------------- ###****
+```
+
+Now if we use the following command the log confirms the interface between **Gazebo** and **ros2_control** is working fine:
+
+```shell
+ros2 launch teleop_description gazebo.launch.py
+```
+
+```shell
+###---
+[gzserver-1] [INFO] [1716315275.264922604] [gazebo_ros2_control]: connected to service!! robot_state_publisher
+[gzserver-1] [INFO] [1716315275.265763371] [gazebo_ros2_control]: Received urdf from param server, parsing...
+[gzserver-1] [INFO] [1716315275.265818645] [gazebo_ros2_control]: Loading parameter files /home/toto/teleop_ws/install/teleop_controller/share/teleop_controller/config/teleop_controllers.yaml
+[gzserver-1] [INFO] [1716315275.278676671] [gazebo_ros2_control]: Loading joint: joint_1
+[gzserver-1] [INFO] [1716315275.278802758] [gazebo_ros2_control]: 	State:
+[gzserver-1] [INFO] [1716315275.278810553] [gazebo_ros2_control]: 		 position
+[gzserver-1] [INFO] [1716315275.278816734] [gazebo_ros2_control]: 	Command:
+[gzserver-1] [INFO] [1716315275.278820892] [gazebo_ros2_control]: 		 position
+[gzserver-1] [INFO] [1716315275.279263172] [gazebo_ros2_control]: Loading joint: joint_2
+[gzserver-1] [INFO] [1716315275.279287688] [gazebo_ros2_control]: 	State:
+[gzserver-1] [INFO] [1716315275.279292146] [gazebo_ros2_control]: 		 position
+[gzserver-1] [INFO] [1716315275.279300843] [gazebo_ros2_control]: 	Command:
+[gzserver-1] [INFO] [1716315275.279304650] [gazebo_ros2_control]: 		 position
+[gzserver-1] [INFO] [1716315275.279326441] [gazebo_ros2_control]: Loading joint: joint_3
+[gzserver-1] [INFO] [1716315275.279336890] [gazebo_ros2_control]: 	State:
+[gzserver-1] [INFO] [1716315275.279342691] [gazebo_ros2_control]: 		 position
+[gzserver-1] [INFO] [1716315275.279346799] [gazebo_ros2_control]: 	Command:
+[gzserver-1] [INFO] [1716315275.279350275] [gazebo_ros2_control]: 		 position
+[gzserver-1] [INFO] [1716315275.279367858] [gazebo_ros2_control]: Loading joint: joint_4
+[gzserver-1] [INFO] [1716315275.279376695] [gazebo_ros2_control]: 	State:
+[gzserver-1] [INFO] [1716315275.279382937] [gazebo_ros2_control]: 		 position
+[gzserver-1] [INFO] [1716315275.279395220] [gazebo_ros2_control]: 	Command:
+[gzserver-1] [INFO] [1716315275.279403716] [gazebo_ros2_control]: 		 position
+[gzserver-1] [INFO] [1716315275.279410899] [gazebo_ros2_control]: Loading joint: joint_5
+[gzserver-1] [INFO] [1716315275.279443771] [gazebo_ros2_control]: Joint 'joint_5'is mimicking joint 'joint_4' with mutiplier: -1
+[gzserver-1] [INFO] [1716315275.279463388] [gazebo_ros2_control]: 	State:
+[gzserver-1] [INFO] [1716315275.279480029] [gazebo_ros2_control]: 	Command:
+[gzserver-1] [INFO] [1716315275.279485960] [gazebo_ros2_control]: 		 position
+[gzserver-1] [INFO] [1716315275.279577852] [resource_manager]: Initialize hardware 'RobotSystem' 
+[gzserver-1] [INFO] [1716315275.279855052] [resource_manager]: Successful initialization of hardware 'RobotSystem'
+[gzserver-1] [INFO] [1716315275.280013540] [resource_manager]: 'configure' hardware 'RobotSystem' 
+[gzserver-1] [INFO] [1716315275.280031113] [resource_manager]: Successful 'configure' of hardware 'RobotSystem'
+[gzserver-1] [INFO] [1716315275.280036292] [resource_manager]: 'activate' hardware 'RobotSystem' 
+[gzserver-1] [INFO] [1716315275.280049557] [resource_manager]: Successful 'activate' of hardware 'RobotSystem'
+[gzserver-1] [INFO] [1716315275.280174221] [gazebo_ros2_control]: Loading controller_manager
+[gzserver-1] [WARN] [1716315275.315894292] [gazebo_ros2_control]:  Desired controller update period (0.1 s) is slower than the gazebo simulation period (0.001 s).
+[gzserver-1] [INFO] [1716315275.316217919] [gazebo_ros2_control]: Loaded gazebo_ros2_control.
+```
+
+The URDF model is set up to load the Gazebo ROS 2 control plugin, interfacing the simulated robot with the ROS 2 Control library. We have defined the input and output interfaces for each joint and configured the **controller manager** to interact with the robot's hardware and other applications. Now, we will create a new ```launch file``` to initiate all these functionalities and ensure the control logic operates smoothly.
+
+```python
+def generate_launch_description():
+
+    robot_description = ParameterValue(
+        Command(
+            [
+                "xacro ",
+                os.path.join(
+                    get_package_share_directory("teleop_description"),
+                    "urdf",
+                    "teleop.urdf.xacro",
+                ),
+            ]
+        ),
+        value_type=str,
+    )
+
+    robot_state_publisher_node = Node(
+        package="robot_state_publisher",
+        executable="robot_state_publisher",
+        parameters=[{"robot_description": robot_description}],
+    )
+
+    joint_state_broadcaster_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=[
+            "joint_state_broadcaster",
+            "--controller-manager",
+            "/controller_manager",
+        ],
+    )
+
+    arm_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["arm_controller", "--controller-manager", "/controller_manager"],
+    )
+
+    gripper_controller_spawner = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["gripper_controller", "--controller-manager", "/controller_manager"],
+    )
+
+    return LaunchDescription(
+        [
+            robot_state_publisher_node,
+            joint_state_broadcaster_spawner,
+            arm_controller_spawner,
+            gripper_controller_spawner,
+        ]
+    )
+```
+
+We launch the launch file (no pun intended):
+
+```shell
+ros2 launch teleop_controller controller.launch.py
+```
+
+The log indicates the successful loading, configuring, and activation of the ```gripper_controller```, ```arm_controller``` and ```joint_state_broadcaster``` for the robot.
+
+```shell
+###---
+[gzserver-1] [INFO] [1716315539.228513760] [gazebo_ros2_control]: Loaded gazebo_ros2_control.
+[gzserver-1] [INFO] [1716315558.147759954] [controller_manager]: Loading controller 'gripper_controller'
+[gzserver-1] [INFO] [1716315558.256109911] [controller_manager]: Loading controller 'arm_controller'
+[gzserver-1] [WARN] [1716315558.289050687] [arm_controller]: [Deprecated]: "allow_nonzero_velocity_at_trajectory_end" is set to true. The default behavior will change to false.
+[gzserver-1] [INFO] [1716315558.355968644] [controller_manager]: Loading controller 'joint_state_broadcaster'
+[gzserver-1] [INFO] [1716315558.456053992] [controller_manager]: Configuring controller 'gripper_controller'
+[gzserver-1] [INFO] [1716315558.458171646] [gripper_controller]: configure successful
+[gzserver-1] [INFO] [1716315558.556961896] [controller_manager]: Configuring controller 'arm_controller'
+[gzserver-1] [INFO] [1716315558.557458688] [arm_controller]: No specific joint names are used for command interfaces. Using 'joints' parameter.
+[gzserver-1] [INFO] [1716315558.557746257] [arm_controller]: Command interfaces are [position] and state interfaces are [position].
+[gzserver-1] [INFO] [1716315558.557872895] [arm_controller]: Using 'splines' interpolation method.
+[gzserver-1] [INFO] [1716315558.561692300] [arm_controller]: Controller state will be published at 50.00 Hz.
+[gzserver-1] [INFO] [1716315558.576925156] [arm_controller]: Action status changes will be monitored at 20.00 Hz.
+[gzserver-1] [INFO] [1716315558.657490767] [controller_manager]: Configuring controller 'joint_state_broadcaster'
+[gzserver-1] [INFO] [1716315558.657799466] [joint_state_broadcaster]: 'joints' or 'interfaces' parameter is empty. All available state interfaces will be published
+[gzserver-1] [INFO] [1716315558.856286022] [gripper_controller]: activate successful
+```
+
+```shell
+###---
+[robot_state_publisher-1] [INFO] [1716315557.077416363] [robot_state_publisher]: got segment base_link
+[robot_state_publisher-1] [INFO] [1716315557.077623602] [robot_state_publisher]: got segment base_plate
+[robot_state_publisher-1] [INFO] [1716315557.077635805] [robot_state_publisher]: got segment claw_support
+[robot_state_publisher-1] [INFO] [1716315557.077640083] [robot_state_publisher]: got segment forward_drive_arm
+[robot_state_publisher-1] [INFO] [1716315557.077643670] [robot_state_publisher]: got segment gripper_left
+[robot_state_publisher-1] [INFO] [1716315557.077647307] [robot_state_publisher]: got segment gripper_right
+[robot_state_publisher-1] [INFO] [1716315557.077650523] [robot_state_publisher]: got segment horizontal_arm
+[robot_state_publisher-1] [INFO] [1716315557.077654971] [robot_state_publisher]: got segment rgb_camera
+[robot_state_publisher-1] [INFO] [1716315557.077661463] [robot_state_publisher]: got segment world
+[spawner-4] [INFO] [1716315558.257217217] [spawner_gripper_controller]: Loaded gripper_controller
+[spawner-3] [INFO] [1716315558.357286928] [spawner_arm_controller]: Loaded arm_controller
+[spawner-2] [INFO] [1716315558.456997833] [spawner_joint_state_broadcaster]: Loaded joint_state_broadcaster
+[spawner-4] [INFO] [1716315558.957633921] [spawner_gripper_controller]: Configured and activated gripper_controller
+[spawner-3] [INFO] [1716315559.158649522] [spawner_arm_controller]: Configured and activated arm_controller
+[INFO] [spawner-4]: process has finished cleanly [pid 31173]
+[spawner-2] [INFO] [1716315559.358607590] [spawner_joint_state_broadcaster]: Configured and activated joint_state_broadcaster
+###---
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -------------------------
 <a name="k"></a>
 
