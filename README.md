@@ -634,6 +634,138 @@ Gazebo will simulate the camera within the virtual environment, while Rviz will 
 <a name="c"></a>
 ## 2. Control
 
+Control is about sending commands to a robot to make sure it moves as **desired**. This involves creating a **controller** that activates systems, like **motors**, based on **inputs** (e.g., rotating to 90 degrees). The system checks the **current state** against the **desired state** to find an ```error```, that the controller will aim to minimize. In ROS 2, the ```ros2_control``` framework handles this using hardware resources, like **actuators** and **sensors**. The ```resource manager``` abstracts hardware details, while the ```controller manager``` connects **control logic** to the hardware, using predefined controllers from the ROS 2 library.
+
+
+The ROS 2 Control library offers three control interfaces: **position**, **velocity**, and **force/torque**. ```Position control```, which we will implement, involves moving a robot from its **current position** to a **desired one**, potentially following a **specific trajectory**. For instance, if a robotic arm's motor needs to rotate from ```0``` to ```90``` degrees, the control system calculates the ```error``` (90 degrees initially) and sends commands to minimize this error, making the motor rotate step-by-step until the error is ```zero```. The system continues to maintain the position, correcting for disturbances. ROS 2 Control also supports ```velocity control``` (**moving at a desired speed**) and ```force/torque control``` (**applying a specific force**), useful for delicate tasks like grasping fragile objects.
+
+We create a new ```teleop_ros2_control.xacro``` file in our ```urdf``` folder in the ```teleop_description``` directory. To connect the ROS 2 control library to hardware resources, we define two interfaces for communication with the hardware: the **command interface** and the **state interface**. The command interface **writes** commands to the ```hardware```, such as telling a motor to move. The state interface **reads** the current state of the hardware, like the motor's position. In this configuration, both interfaces are set to control the motor's **position**. The command interface has limits set from ```-90``` to ```90``` degrees. This ensures the motor operates within safe rotational bounds. Since all the movable joints of the robot will use the same command interface and also will provide the same state interface, we can copy and paste this tag joint for joint ```1```, ```2```, ```3``` and ```4```.
+
+The last two joints control the gripper fingers and have different motion ranges. Joint 4 has a range from ```-90``` degrees to``` 0``` degrees. Joint 5 ranges from ```0``` degrees to ```90``` degrees. Joint 5 is **mechanically linked** to Joint 4, moving together through a gear system. To reflect this in the control system, we use two parameters: **mimic**, which makes Joint 5 copy Joint 4's **behavior**, and **multiplier**, set to ```-1``` to make the fingers open **symmetrically** in **opposite** directions. 
+
+```xml
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="teleop_robot">
+
+    <!-- Define the ros2_control block for the robot system -->
+    <ros2_control name="RobotSystem" type="system">
+        
+        <!-- Define a property named 'PI' with the value of Pi -->
+        <xacro:property name="PI" value="3.14159265359" />
+
+        <!-- Specify the hardware plugin to be used -->
+        <hardware>
+            <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+        </hardware>
+        
+        <!-- Define the common interfaces for ros2_control -->
+        <!-- Joint 1 configuration -->
+        <joint name="joint_1">
+            <command_interface name="position">
+                <!-- Set the minimum and maximum command values for joint_1 -->
+                <param name="min">-${PI / 2}</param>
+                <param name="max">${PI / 2}</param>
+            </command_interface>
+            <!-- State interface for joint_1 position -->
+            <state_interface name="position"/>
+        </joint>
+
+        <!-- Joint 2 configuration -->
+        <joint name="joint_2">
+            <command_interface name="position">
+                <!-- Set the minimum and maximum command values for joint_2 -->
+                <param name="min">-${PI / 2}</param>
+                <param name="max">${PI / 2}</param>
+            </command_interface>
+            <!-- State interface for joint_2 position -->
+            <state_interface name="position"/>
+        </joint>
+
+        <!-- Joint 3 configuration -->
+        <joint name="joint_3">
+            <command_interface name="position">
+                <!-- Set the minimum and maximum command values for joint_3 -->
+                <param name="min">-${PI / 2}</param>
+                <param name="max">${PI / 2}</param>
+            </command_interface>
+            <!-- State interface for joint_3 position -->
+            <state_interface name="position"/>
+        </joint>
+
+        <!-- Joint 4 configuration -->
+        <joint name="joint_4">
+            <command_interface name="position">
+                <!-- Set the minimum and maximum command values for joint_4 -->
+                <param name="min">-${PI / 2}</param>
+                <param name="max">0.0</param>
+            </command_interface>
+            <!-- State interface for joint_4 position -->
+            <state_interface name="position"/>
+        </joint>
+
+        <!-- Joint 5 configuration -->
+        <joint name="joint_5">
+            <!-- Mimic joint_4 with an inverted multiplier -->
+            <param name="mimic">joint_4</param>
+            <param name="multiplier">-1</param>
+            <command_interface name="position">
+                <!-- Set the minimum and maximum command values for joint_5 -->
+                <param name="min">0.0</param>
+                <param name="max">${PI / 2}</param>
+            </command_interface>
+        </joint>
+        
+    </ros2_control>
+
+</robot>
+```
+
+In our ```teleop.urdf.xacro``` file we will define a macro that will assign a transmission to each of the movable joints of the robot. The transmission tag indicates the presence of a mechanical transmission that connects each motor of the robot to each link of the arm.
+
+```xml
+    <!-- Define a Xacro macro named 'default_transmission' with a parameter 'number' -->
+    <xacro:macro name="default_transmission" params="number">
+        <!-- Define a transmission element with a unique name based on the 'number' parameter -->
+        <transmission name="transmission_${number}">
+            <!-- Specify the transmission plugin type -->
+            <plugin>transmission_interface/SimpleTransmission</plugin>
+            <!-- Define an actuator with a unique name based on the 'number' parameter and assign a role -->
+            <actuator name="motor_${number}" role="actuator1"/>
+            <!-- Define a joint with a unique name based on the 'number' parameter and assign a role -->
+            <joint name="joint_${number}" role="joint1">
+                <!-- Set the mechanical reduction factor for the joint -->
+                <mechanical_reduction>1.0</mechanical_reduction>
+            </joint>
+        </transmission>
+    </xacro:macro>
+
+    <!-- Call the 'default_transmission' macro with the 'number' parameter set to 1 -->
+    <xacro:default_transmission number="1"/>
+    <!-- Call the 'default_transmission' macro with the 'number' parameter set to 2 -->
+    <xacro:default_transmission number="2"/>
+    <!-- Call the 'default_transmission' macro with the 'number' parameter set to 3 -->
+    <xacro:default_transmission number="3"/>
+    <!-- Call the 'default_transmission' macro with the 'number' parameter set to 4 -->
+    <xacro:default_transmission number="4"/>
+```
+
+In our ```teleop_gazebo.xacro``` file, we add the ```ros2_control``` **plugin**:
+
+```xml
+    <!-- Gazebo ros2_control plugin -->
+    <gazebo>
+    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+        <robot_param>robot_description</robot_param>
+        <robot_param_node>robot_state_publisher</robot_param_node>
+        <parameters>$(find teleop_controller)/config/teleop_controllers.yaml</parameters>
+    </plugin>
+    </gazebo>
+```
+
+
+
+Next, we create a new package in our ```src``` directory named ```teleop_controller```. Do not forget to build the workspace using ```colcon build```.
+
 ```shell
 ros2 pkg create --build-type ament_cmake teleop_controller
 ```
