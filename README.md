@@ -639,6 +639,8 @@ Control is about sending commands to a robot to make sure it moves as **desired*
 
 The ROS 2 Control library offers three control interfaces: **position**, **velocity**, and **force/torque**. ```Position control```, which we will implement, involves moving a robot from its **current position** to a **desired one**, potentially following a **specific trajectory**. For instance, if a robotic arm's motor needs to rotate from ```0``` to ```90``` degrees, the control system calculates the ```error``` (90 degrees initially) and sends commands to minimize this error, making the motor rotate step-by-step until the error is ```zero```. The system continues to maintain the position, correcting for disturbances. ROS 2 Control also supports ```velocity control``` (**moving at a desired speed**) and ```force/torque control``` (**applying a specific force**), useful for delicate tasks like grasping fragile objects.
 
+![image](https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/cf1e37fa-233e-42ff-87ac-254d7dee3de4)
+
 We create a new ```teleop_ros2_control.xacro``` file in our ```urdf``` folder in the ```teleop_description``` directory. To connect the ROS 2 control library to hardware resources, we define two interfaces for communication with the hardware: the **command interface** and the **state interface**. The command interface **writes** commands to the ```hardware```, such as telling a motor to move. The state interface **reads** the current state of the hardware, like the motor's position. In this configuration, both interfaces are set to control the motor's **position**. The command interface has limits set from ```-90``` to ```90``` degrees. This ensures the motor operates within safe rotational bounds. Since all the movable joints of the robot will use the same command interface and also will provide the same state interface, we can copy and paste this tag joint for joint ```1```, ```2```, ```3``` and ```4```.
 
 The last two joints control the gripper fingers and have different motion ranges. Joint 4 has a range from ```-90``` degrees to``` 0``` degrees. Joint 5 ranges from ```0``` degrees to ```90``` degrees. Joint 5 is **mechanically linked** to Joint 4, moving together through a gear system. To reflect this in the control system, we use two parameters: **mimic**, which makes Joint 5 copy Joint 4's **behavior**, and **multiplier**, set to ```-1``` to make the fingers open **symmetrically** in **opposite** directions. 
@@ -1032,6 +1034,8 @@ data: [0]"
 We now have a real manipulator robot in Gazebo, controllable via ROS 2 Control. However, our current system only allows **individual joint control**, making complex movements difficult, like those needed for pick-and-place tasks. To simplify control, we'll study **kinematics**, which focuses on the robot's gripper **position** and **orientation** in ```3D space``` rather than ```joint angles```.
 
 Currently, manually coordinating joints to move the gripper is complex and impractical. Kinematics helps us understand how joint movements affect the gripper's position, using **forward kinematics** (```joint angles to gripper position```) and **inverse kinematics** (```gripper position to joint angles```). This allows us to move the gripper directly in ```Cartesian space```, with the math handling joint coordination automatically.
+
+![image](https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/0d375f80-f76f-44b0-a8ec-1de9f08f0d8a)
 
 
 -------------------------
