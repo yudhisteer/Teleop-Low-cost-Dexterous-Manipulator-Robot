@@ -1041,6 +1041,72 @@ Currently, manually coordinating joints to move the gripper is complex and impra
 ![image](https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/0d375f80-f76f-44b0-a8ec-1de9f08f0d8a)
 
 
+```shell
+ros2 topic info /tf --verbose
+```
+
+
+```shell
+Type: tf2_msgs/msg/TFMessage
+
+Publisher count: 1
+
+Node name: robot_state_publisher
+Node namespace: /
+Topic type: tf2_msgs/msg/TFMessage
+Endpoint type: PUBLISHER
+GID: 01.0f.bd.0a.c8.2d.45.2b.01.00.00.00.00.00.12.03.00.00.00.00.00.00.00.00
+```
+
+```shell
+ros2 topic echo /tf
+```
+
+```shell
+transforms:
+- header:
+    stamp:
+      sec: 1716587608
+      nanosec: 671408293
+    frame_id: base_link
+  child_frame_id: base_plate
+  transform:
+    translation:
+      x: 0.0
+      y: 0.0
+      z: 0.307
+    rotation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+- header:
+    stamp:
+      sec: 1716587608
+      nanosec: 671408293
+    frame_id: base_plate
+  child_frame_id: forward_drive_arm
+  transform:
+    translation:
+      x: -0.02
+      y: 0.0
+      z: 0.35
+    rotation:
+      x: 0.0
+      y: 0.0
+      z: 0.0
+      w: 1.0
+```
+
+![image](https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/fee4161f-83b4-404a-af6e-e6f50a6b85b4)
+
+
+```shell
+ros2 run tf2_ros tf2_echo world claw_support
+```
+
+![24 05 2024_15 03 33_REC](https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/ff64a009-ea4f-4bb5-9d33-5f933e2f9808)
+
 -------------------------
 ## References
 
