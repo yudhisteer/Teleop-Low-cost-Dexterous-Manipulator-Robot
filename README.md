@@ -1107,6 +1107,17 @@ ros2 run tf2_ros tf2_echo world claw_support
 
 ![24 05 2024_15 03 33_REC](https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/ff64a009-ea4f-4bb5-9d33-5f933e2f9808)
 
+
+
+
+
+
+![image](https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/de962ea7-4ccc-4f47-9e7b-7368971a017b)
+
+
+
+
+
 -------------------------
 ## References
 
