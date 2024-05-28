@@ -1040,7 +1040,7 @@ We now have a real manipulator robot in Gazebo, controllable via ROS 2 Control. 
 Currently, manually coordinating joints to move the gripper is complex and impractical. Kinematics helps us understand how joint movements affect the gripper's position, using **forward kinematics** (```joint angles to gripper position```) and **inverse kinematics** (```gripper position to joint angles```). This allows us to move the gripper directly in ```Cartesian space```, with the math handling joint coordination automatically.
 
 <p align="center">
-  <img src="https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/d347dad7-4c01-4bfb-8367-7c1756565504" width="50%" />
+  <img src="https://github.com/yudhisteer/Teleop-Low-cost-Dexterous-Manipulator-Robot/assets/59663734/d347dad7-4c01-4bfb-8367-7c1756565504" width="60%" />
 </p>
 
 
